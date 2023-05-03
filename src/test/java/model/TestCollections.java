@@ -2,18 +2,14 @@ package model;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -170,6 +166,7 @@ public class TestCollections {
         while ((line = reader.readLine()) != null) {
             lines.add(line);
         }
+
         assertEquals(19, lines.size());
         assertEquals("", lines.get(8));
     }
@@ -179,7 +176,7 @@ public class TestCollections {
     void testReadAllWordsFromFileToList() throws IOException {
         // todo прочитать все строки, разбить на слова и записать в коллекцию
         List<String> words = readAllWordsFromFileToList();
-        assertEquals(257, words.size() - 1);
+        assertEquals(257, words.size());
     }
 
     List<String> readAllWordsFromFileToList() throws IOException {
@@ -188,6 +185,9 @@ public class TestCollections {
         while ((line = reader.readLine()) != null) {
             String[] arr = line.split(REGEXP);
             Collections.addAll(lines, arr);
+        }
+        while (lines.contains("")) {
+            lines.remove("");
         }
         return lines;
     }
@@ -275,9 +275,11 @@ public class TestCollections {
             String[] arr = line.split(REGEXP);
             Collections.addAll(lines, arr);
         }
-        int k=5;
+        int k = 5;
         List<String> result1 = lines.stream().map(String::toLowerCase).distinct().collect(Collectors.toList());
-        result1.remove("");
+        while (result1.contains("")) {
+            result1.remove("");
+        }
         List<String> result = result1.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
         List<String> numberWords = new ArrayList<>();
         for (String str : result
